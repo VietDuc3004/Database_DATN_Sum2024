@@ -1,4 +1,5 @@
 use master;
+drop database Man_Store;
 create database Man_Store;
 use Man_Store;
 
@@ -135,7 +136,7 @@ GO
 CREATE TABLE [DotGiamGia] (
   [id] integer PRIMARY KEY IDENTITY(1, 1),
   [Ma] varchar(50),
-  [Ten] narchar(100),
+  [Ten] nvarchar(100),
   [NgayTao] date,
   [NgayBatDau] date,
   [NgayKetThuc] date,
@@ -205,7 +206,7 @@ CREATE TABLE [NhanVien] (
   [id] integer PRIMARY KEY IDENTITY(1, 1),
   [Ma] varchar(50),
   [Ten] nvarchar(100),
-  [SDT] int(10),
+  [SDT] int,
   [DiaChi] varchar(300),
   [NgaySinh] date,
   [Email] varchar(50),
