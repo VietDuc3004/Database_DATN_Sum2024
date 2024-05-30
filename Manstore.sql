@@ -50,6 +50,9 @@ CREATE TABLE [HinhAnh] (
   [MoTa] nvarchar(500)
 )
 GO
+EXEC sp_rename 'HinhAnh.MoTa', 'url', 'COLUMN';
+GO
+select * from HinhAnh;
 
 CREATE TABLE [DanhMuc] (
   [id] integer PRIMARY KEY IDENTITY(1, 1),
@@ -144,6 +147,13 @@ CREATE TABLE [DotGiamGia] (
   [idTaiKhoan] integer NOT NULL
 )
 GO
+ALTER TABLE [DotGiamGia]
+ADD LoaiGiamGia bit;
+ALTER TABLE [DotGiamGia]
+ADD GiaTriGiam float;
+
+select * from DotGiamGia;
+
 
 CREATE TABLE [DotGiamGiaChiTiet] (
   [id] integer PRIMARY KEY IDENTITY(1, 1),
@@ -193,6 +203,8 @@ CREATE TABLE [PhieuGiamGia] (
   [TrangThai] int
 )
 GO
+
+
 
 CREATE TABLE [PhieuGiamGiaChiTiet] (
   [id] integer PRIMARY KEY IDENTITY(1, 1),
