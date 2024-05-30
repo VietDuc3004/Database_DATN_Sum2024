@@ -1,4 +1,4 @@
-use master;
+﻿use master;
 drop database Man_Store;
 create database Man_Store;
 use Man_Store;
@@ -346,3 +346,15 @@ GO
 
 ALTER TABLE [HoaDon] ADD FOREIGN KEY ([idPhieuGiamGia]) REFERENCES [PhieuGiamGia] ([id])
 GO
+
+--Xóa idTaikhoan trong bảng DotgiamGia
+ALTER TABLE DotGiamGia
+DROP CONSTRAINT FK__DotGiamGi__idTai__0F624AF8;
+GO
+
+
+ALTER TABLE DotGiamGia
+DROP COLUMN idTaiKhoan;
+GO
+
+
