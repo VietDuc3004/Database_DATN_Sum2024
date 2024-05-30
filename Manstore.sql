@@ -1,4 +1,4 @@
-use master;
+﻿use master;
 drop database Man_Store;
 create database Man_Store;
 use Man_Store;
@@ -334,3 +334,5 @@ GO
 
 ALTER TABLE [HoaDon] ADD FOREIGN KEY ([idPhieuGiamGia]) REFERENCES [PhieuGiamGia] ([id])
 GO
+--Thêm loại giảm giá vào bảng Đợt giảm giá
+ALTER TABLE DotGiamGia ADD Loaigiamgia BIT;
