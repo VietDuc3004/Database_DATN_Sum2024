@@ -1,4 +1,4 @@
-﻿use master;
+use master;
 drop database Man_Store;
 create database Man_Store;
 use Man_Store;
@@ -47,12 +47,9 @@ CREATE TABLE [HinhAnh] (
   [id] integer PRIMARY KEY IDENTITY(1, 1),
   [Ma] varchar(50),
   [Ten] nvarchar(100),
-  [MoTa] nvarchar(500)
+  [Url] nvarchar(500)
 )
 GO
-EXEC sp_rename 'HinhAnh.MoTa', 'url', 'COLUMN';
-GO
-select * from HinhAnh;
 
 CREATE TABLE [DanhMuc] (
   [id] integer PRIMARY KEY IDENTITY(1, 1),
@@ -143,35 +140,16 @@ CREATE TABLE [DotGiamGia] (
   [NgayTao] date,
   [NgayBatDau] date,
   [NgayKetThuc] date,
-  [TrangThai] int,
-  [idTaiKhoan] integer NOT NULL
-)
-GO
-ALTER TABLE [DotGiamGia]
-ADD LoaiGiamGia bit;
-ALTER TABLE [DotGiamGia]
-ADD GiaTriGiam float;
-
-select * from DotGiamGia;
-
-
-CREATE TABLE [DotGiamGiaChiTiet] (
-  [id] integer PRIMARY KEY IDENTITY(1, 1),
-  [idDotGiamGia] integer NOT NULL,
-  [idSanPham] integer NOT NULL
-)
-GO
-
-CREATE TABLE [ChiTietTaiKhoanKhachHang] (
-  [id] integer PRIMARY KEY IDENTITY(1, 1),
-  [idTaiKhoan] integer NOT NULL,
-  [idKhachHang] integer NOT NULL,
+  [LoaiGiamGia] bit,
+  [GiaTriGiam] int,
+  [GiaTriDonHang] float,
   [TrangThai] int
 )
 GO
 
 CREATE TABLE [DiaChi] (
   [id] integer PRIMARY KEY IDENTITY(1, 1),
+  [idKhachHang] integer NOT NULL,
   [Ma] varchar(50),
   [Tinh_TP] nvarchar(50),
   [Quan_Huyen] nvarchar(50),
@@ -185,7 +163,6 @@ CREATE TABLE [KhachHang] (
   [Ma] varchar(50),
   [Ten] nvarchar(100),
   [SDT] int,
-  [idDiaChi] integer NOT NULL,
   [Email] varchar(50),
   [NgaySinh] date,
   [GioiTinh] int
@@ -195,21 +172,39 @@ GO
 CREATE TABLE [PhieuGiamGia] (
   [id] integer PRIMARY KEY IDENTITY(1, 1),
   [Ma] varchar(50),
-  [Ten] nvarchar(100),
+  [TieuDe] nvarchar(100),
   [NgayMo] date,
   [NgayDong] date,
   [SoLuong] int,
-  [LoaiGiamGia] varchar(100),
+  [LoaiGiamGia] bit,
+  [GiaTriGiam] int,
+  [PhuongThucThanhToan] nvarchar(100),
+  [DieuKien] nvarchar(300),
   [TrangThai] int
 )
 GO
 
-
-
-CREATE TABLE [PhieuGiamGiaChiTiet] (
+CREATE TABLE [KhahHang_PhieuGiam] (
   [id] integer PRIMARY KEY IDENTITY(1, 1),
   [idPhieuGiamGia] integer NOT NULL,
   [idKhachHang] integer NOT NULL,
+  [TrangThai] int
+)
+GO
+
+CREATE TABLE [HoaDon_PhieuGiam] (
+  [id] integer PRIMARY KEY IDENTITY(1, 1),
+  [idPhieuGiamGia] integer NOT NULL,
+  [idHoaDon] integer NOT NULL,
+  [TrangThai] int
+)
+GO
+
+CREATE TABLE [Lich_Su] (
+  [id] integer PRIMARY KEY IDENTITY(1, 1),
+  [idKhahHang_PhieuGiam] integer NOT NULL,
+  [idHoaDon_PhieuGiam] integer NOT NULL,
+  [SoLuong] int,
   [TrangThai] int
 )
 GO
@@ -228,17 +223,9 @@ CREATE TABLE [NhanVien] (
 )
 GO
 
-CREATE TABLE [ChiTietTaiKhoanNhanVien] (
-  [id] integer PRIMARY KEY IDENTITY(1, 1),
-  [idNhanVien] integer NOT NULL,
-  [idTaiKhoan] integer NOT NULL,
-  [TrangThai] int
-)
-GO
-
 CREATE TABLE [HoaDon] (
   [id] integer PRIMARY KEY IDENTITY(1, 1),
-  [idPhieuGiamGia] integer NOT NULL,
+  [idDotGiamGia] integer NOT NULL,
   [idKhachHang] integer NOT NULL,
   [idNhanVien] integer NOT NULL,
   [Ma] varchar(50),
@@ -258,12 +245,6 @@ CREATE TABLE [ChiTietHoaDon] (
   [SoLuong] int,
   [TrangThai] int
 )
-GO
-
-ALTER TABLE [ChiTietTaiKhoanNhanVien] ADD FOREIGN KEY ([idNhanVien]) REFERENCES [NhanVien] ([id])
-GO
-
-ALTER TABLE [ChiTietTaiKhoanNhanVien] ADD FOREIGN KEY ([idTaiKhoan]) REFERENCES [TaiKhoan] ([id])
 GO
 
 ALTER TABLE [SanPham] ADD FOREIGN KEY ([idDanhMuc]) REFERENCES [DanhMuc] ([id])
@@ -314,28 +295,25 @@ GO
 ALTER TABLE [NhanVien] ADD FOREIGN KEY ([idTaiKhoan]) REFERENCES [TaiKhoan] ([id])
 GO
 
-ALTER TABLE [KhachHang] ADD FOREIGN KEY ([idDiaChi]) REFERENCES [DiaChi] ([id])
+ALTER TABLE [DiaChi] ADD FOREIGN KEY ([idKhachHang]) REFERENCES [KhachHang] ([id])
 GO
 
-ALTER TABLE [PhieuGiamGiaChiTiet] ADD FOREIGN KEY ([idKhachHang]) REFERENCES [KhachHang] ([id])
+ALTER TABLE [KhahHang_PhieuGiam] ADD FOREIGN KEY ([idKhachHang]) REFERENCES [KhachHang] ([id])
 GO
 
-ALTER TABLE [PhieuGiamGiaChiTiet] ADD FOREIGN KEY ([idPhieuGiamGia]) REFERENCES [PhieuGiamGia] ([id])
+ALTER TABLE [KhahHang_PhieuGiam] ADD FOREIGN KEY ([idPhieuGiamGia]) REFERENCES [PhieuGiamGia] ([id])
 GO
 
-ALTER TABLE [ChiTietTaiKhoanKhachHang] ADD FOREIGN KEY ([idTaiKhoan]) REFERENCES [TaiKhoan] ([id])
+ALTER TABLE [HoaDon_PhieuGiam] ADD FOREIGN KEY ([idHoaDon]) REFERENCES [HoaDon] ([id])
 GO
 
-ALTER TABLE [ChiTietTaiKhoanKhachHang] ADD FOREIGN KEY ([idKhachHang]) REFERENCES [KhachHang] ([id])
+ALTER TABLE [HoaDon_PhieuGiam] ADD FOREIGN KEY ([idPhieuGiamGia]) REFERENCES [PhieuGiamGia] ([id])
 GO
 
-ALTER TABLE [DotGiamGiaChiTiet] ADD FOREIGN KEY ([idDotGiamGia]) REFERENCES [DotGiamGia] ([id])
+ALTER TABLE [Lich_Su] ADD FOREIGN KEY ([idHoaDon_PhieuGiam]) REFERENCES [HoaDon_PhieuGiam] ([id])
 GO
 
-ALTER TABLE [DotGiamGiaChiTiet] ADD FOREIGN KEY ([idSanPham]) REFERENCES [SanPham] ([id])
-GO
-
-ALTER TABLE [DotGiamGia] ADD FOREIGN KEY ([idTaiKhoan]) REFERENCES [TaiKhoan] ([id])
+ALTER TABLE [Lich_Su] ADD FOREIGN KEY ([idKhahHang_PhieuGiam]) REFERENCES [KhahHang_PhieuGiam] ([id])
 GO
 
 ALTER TABLE [HoaDon] ADD FOREIGN KEY ([idKhachHang]) REFERENCES [KhachHang] ([id])
@@ -344,17 +322,5 @@ GO
 ALTER TABLE [HoaDon] ADD FOREIGN KEY ([idNhanVien]) REFERENCES [NhanVien] ([id])
 GO
 
-ALTER TABLE [HoaDon] ADD FOREIGN KEY ([idPhieuGiamGia]) REFERENCES [PhieuGiamGia] ([id])
+ALTER TABLE [HoaDon] ADD FOREIGN KEY ([idDotGiamGia]) REFERENCES [DotGiamGia] ([id])
 GO
-
---Xóa idTaikhoan trong bảng DotgiamGia
-ALTER TABLE DotGiamGia
-DROP CONSTRAINT FK__DotGiamGi__idTai__0F624AF8;
-GO
-
-
-ALTER TABLE DotGiamGia
-DROP COLUMN idTaiKhoan;
-GO
-
-
