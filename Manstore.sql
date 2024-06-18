@@ -115,7 +115,7 @@ CREATE TABLE [TaiKhoan] (
 )
 GO
 
-CREATE TABLE [ChoPhep] (
+CREATE TABLE [TaiKhoan_PhanQuyen] (
   [id] integer PRIMARY KEY IDENTITY(1, 1),
   [idTaiKhoan] integer,
   [idPhanQuyen] integer,
@@ -219,7 +219,7 @@ CREATE TABLE [HoaDon_PhieuGiam] (
 )
 GO
 
-CREATE TABLE [Lich_Su] (
+CREATE TABLE [LichSu_PhieuGiam] (
   [id] integer PRIMARY KEY IDENTITY(1, 1),
   [idKhahHang_PhieuGiam] integer,
   [idHoaDon_PhieuGiam] integer,
