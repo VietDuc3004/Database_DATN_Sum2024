@@ -270,10 +270,10 @@ GO
 ALTER TABLE [HoaDon] ADD FOREIGN KEY ([idTaiKhoan]) REFERENCES [TaiKhoan] ([id])
 GO
 
-ALTER TABLE [ChoPhep] ADD FOREIGN KEY ([idTaiKhoan]) REFERENCES [TaiKhoan] ([id])
+ALTER TABLE [TaiKhoan_PhanQuyen] ADD FOREIGN KEY ([idTaiKhoan]) REFERENCES [TaiKhoan] ([id])
 GO
 
-ALTER TABLE [ChoPhep] ADD FOREIGN KEY ([idPhanQuyen]) REFERENCES [PhanQuyen] ([id])
+ALTER TABLE [TaiKhoan_PhanQuyen] ADD FOREIGN KEY ([idPhanQuyen]) REFERENCES [PhanQuyen] ([id])
 GO
 
 ALTER TABLE [GioHang] ADD FOREIGN KEY ([idKhachHang]) REFERENCES [KhachHang] ([id])
@@ -342,10 +342,10 @@ GO
 ALTER TABLE [HoaDon_PhieuGiam] ADD FOREIGN KEY ([idPhieuGiamGia]) REFERENCES [PhieuGiamGia] ([id])
 GO
 
-ALTER TABLE [Lich_Su] ADD FOREIGN KEY ([idHoaDon_PhieuGiam]) REFERENCES [HoaDon_PhieuGiam] ([id])
+ALTER TABLE [LichSu_PhieuGiam] ADD FOREIGN KEY ([idHoaDon_PhieuGiam]) REFERENCES [HoaDon_PhieuGiam] ([id])
 GO
 
-ALTER TABLE [Lich_Su] ADD FOREIGN KEY ([idKhahHang_PhieuGiam]) REFERENCES [KhahHang_PhieuGiam] ([id])
+ALTER TABLE [LichSu_PhieuGiam] ADD FOREIGN KEY ([idKhahHang_PhieuGiam]) REFERENCES [KhahHang_PhieuGiam] ([id])
 GO
 
 ALTER TABLE [HoaDon] ADD FOREIGN KEY ([idKhachHang]) REFERENCES [KhachHang] ([id])
