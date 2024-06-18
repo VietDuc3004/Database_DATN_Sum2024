@@ -68,13 +68,13 @@ CREATE TABLE [SanPham] (
   [Gia] decimal,
   [GiaSale] decimal,
   [MoTa] nvarchar(500),
-  [idDanhMuc] integer NOT NULL,
-  [idHinhAnh] integer NOT NULL,
-  [idThuongHieu] integer NOT NULL,
-  [idCoAo] integer NOT NULL,
-  [idDuoiAo] integer NOT NULL,
-  [idKieuDang] integer NOT NULL,
-  [idChatLieu] integer NOT NULL,
+  [idDanhMuc] integer,
+  [idHinhAnh] integer,
+  [idThuongHieu] integer,
+  [idCoAo] integer,
+  [idDuoiAo] integer,
+  [idKieuDang] integer,
+  [idChatLieu] integer,
   [TrangThai] int
 )
 GO
@@ -83,9 +83,9 @@ CREATE TABLE [ChiTietSanPham] (
   [id] integer PRIMARY KEY IDENTITY(1, 1),
   [NgayTao] date,
   [Soluong] int,
-  [idSize] integer NOT NULL,
-  [idSanPham] integer NOT NULL,
-  [idMauSac] integer NOT NULL,
+  [idSize] integer,
+  [idSanPham] integer,
+  [idMauSac] integer,
   [TrangThai] int
 )
 GO
@@ -110,8 +110,23 @@ CREATE TABLE [TaiKhoan] (
   [TenTaiKhoan] varchar(20),
   [MatKhau] varchar(20),
   [Email] varchar(100),
-  [PhanQuyen] int,
-  [NgayTao] date
+  [NgayTao] date,
+  [TrangThai] int
+)
+GO
+
+CREATE TABLE [ChoPhep] (
+  [id] integer PRIMARY KEY IDENTITY(1, 1),
+  [idTaiKhoan] integer,
+  [idPhanQuyen] integer,
+  [TrangThai] int
+)
+GO
+
+CREATE TABLE [PhanQuyen] (
+  [id] integer PRIMARY KEY IDENTITY(1, 1),
+  [Ten] nvarchar(100),
+  [MoTa] nvarchar(200)
 )
 GO
 
@@ -119,7 +134,8 @@ CREATE TABLE [GioHang] (
   [id] integer PRIMARY KEY IDENTITY(1, 1),
   [Ma] varchar(50),
   [NgayTao] date,
-  [idTaiKhoan] integer NOT NULL
+  [idTaiKhoan] integer,
+  [idKhachHang] integer
 )
 GO
 
@@ -128,8 +144,8 @@ CREATE TABLE [GioHangChiTiet] (
   [SoLuong] int,
   [DonGia] decimal,
   [TongTien] decimal,
-  [idSanPhamChiTiet] integer NOT NULL,
-  [idGioHang] integer NOT NULL
+  [idSanPhamChiTiet] integer,
+  [idGioHang] integer
 )
 GO
 
@@ -149,7 +165,7 @@ GO
 
 CREATE TABLE [DiaChi] (
   [id] integer PRIMARY KEY IDENTITY(1, 1),
-  [idKhachHang] integer NOT NULL,
+  [idKhachHang] integer,
   [Ma] varchar(50),
   [Tinh_TP] nvarchar(50),
   [Quan_Huyen] nvarchar(50),
@@ -162,7 +178,9 @@ CREATE TABLE [KhachHang] (
   [id] integer PRIMARY KEY IDENTITY(1, 1),
   [Ma] varchar(50),
   [Ten] nvarchar(100),
-  [SDT] int,
+  [UserName] varchar(50),
+  [PassWord] varchar(100),
+  [SDT] varchar(10),
   [Email] varchar(50),
   [NgaySinh] date,
   [GioiTinh] int
@@ -186,24 +204,25 @@ GO
 
 CREATE TABLE [KhahHang_PhieuGiam] (
   [id] integer PRIMARY KEY IDENTITY(1, 1),
-  [idPhieuGiamGia] integer NOT NULL,
-  [idKhachHang] integer NOT NULL,
+  [idPhieuGiamGia] integer,
+  [idKhachHang] integer,
+  [SoLuong] int,
   [TrangThai] int
 )
 GO
 
 CREATE TABLE [HoaDon_PhieuGiam] (
   [id] integer PRIMARY KEY IDENTITY(1, 1),
-  [idPhieuGiamGia] integer NOT NULL,
-  [idHoaDon] integer NOT NULL,
+  [idPhieuGiamGia] integer,
+  [idHoaDon] integer,
   [TrangThai] int
 )
 GO
 
 CREATE TABLE [Lich_Su] (
   [id] integer PRIMARY KEY IDENTITY(1, 1),
-  [idKhahHang_PhieuGiam] integer NOT NULL,
-  [idHoaDon_PhieuGiam] integer NOT NULL,
+  [idKhahHang_PhieuGiam] integer,
+  [idHoaDon_PhieuGiam] integer,
   [SoLuong] int,
   [TrangThai] int
 )
@@ -213,21 +232,22 @@ CREATE TABLE [NhanVien] (
   [id] integer PRIMARY KEY IDENTITY(1, 1),
   [Ma] varchar(50),
   [Ten] nvarchar(100),
-  [SDT] int,
+  [SDT] varchar(10),
   [DiaChi] varchar(300),
   [NgaySinh] date,
   [Email] varchar(50),
   [GioiTinh] int,
-  [idTaiKhoan] integer NOT NULL,
+  [idTaiKhoan] integer,
   [TrangThai] int
 )
 GO
 
 CREATE TABLE [HoaDon] (
   [id] integer PRIMARY KEY IDENTITY(1, 1),
-  [idDotGiamGia] integer NOT NULL,
-  [idKhachHang] integer NOT NULL,
-  [idNhanVien] integer NOT NULL,
+  [idDotGiamGia] integer,
+  [idKhachHang] integer,
+  [idNhanVien] integer,
+  [idTaiKhoan] integer,
   [Ma] varchar(50),
   [NgayTao] date,
   [VAT] decimal,
@@ -240,11 +260,23 @@ GO
 CREATE TABLE [ChiTietHoaDon] (
   [id] integer PRIMARY KEY IDENTITY(1, 1),
   [idChiTietSanPham] integer NOT NULL,
-  [idHoaDon] integer NOT NULL,
+  [idHoaDon] integer,
   [DonGia] decimal,
   [SoLuong] int,
   [TrangThai] int
 )
+GO
+
+ALTER TABLE [HoaDon] ADD FOREIGN KEY ([idTaiKhoan]) REFERENCES [TaiKhoan] ([id])
+GO
+
+ALTER TABLE [ChoPhep] ADD FOREIGN KEY ([idTaiKhoan]) REFERENCES [TaiKhoan] ([id])
+GO
+
+ALTER TABLE [ChoPhep] ADD FOREIGN KEY ([idPhanQuyen]) REFERENCES [PhanQuyen] ([id])
+GO
+
+ALTER TABLE [GioHang] ADD FOREIGN KEY ([idKhachHang]) REFERENCES [KhachHang] ([id])
 GO
 
 ALTER TABLE [SanPham] ADD FOREIGN KEY ([idDanhMuc]) REFERENCES [DanhMuc] ([id])
@@ -324,3 +356,4 @@ GO
 
 ALTER TABLE [HoaDon] ADD FOREIGN KEY ([idDotGiamGia]) REFERENCES [DotGiamGia] ([id])
 GO
+
